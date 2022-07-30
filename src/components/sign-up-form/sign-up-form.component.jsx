@@ -31,10 +31,6 @@ const SignUpForm = () => {
     };
 
     const handleSubmit = async (e) => {
-        // const logGoogleUser = async () => {
-        //     const response = await signInWithGooglePopup();
-        //     const userDocRef = await createUserDocumentFromAuth(response.user);
-        // };
         e.preventDefault();
 
         if (password !== confirmPassword) {
@@ -52,7 +48,7 @@ const SignUpForm = () => {
             // Reset form fields
             setFormData(defaultFormField);
         } catch (err) {
-            if (err.code == "auth/email-already-in-use") {
+            if (err.code === "auth/email-already-in-use") {
                 alert("Email already exists");
             } else {
                 console.log("Error: ", err);
@@ -63,7 +59,7 @@ const SignUpForm = () => {
     return (
         <div className="sign-up-container">
             <h2>Don't have an account?</h2>
-            <span>Sign Up with your email and password</span>
+            <span>Sign up with your email and password</span>
             <form onSubmit={handleSubmit}>
                 <FormInput
                     label="Display Name"
