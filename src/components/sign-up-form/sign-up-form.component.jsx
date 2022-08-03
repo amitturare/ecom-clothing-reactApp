@@ -21,6 +21,7 @@ const SignUpForm = () => {
     const [formData, setFormData] = useState(defaultFormField);
     const { displayName, email, password, confirmPassword } = formData;
 
+    // * Field Change
     const handleFieldChange = (e) => {
         const { name, value } = e.target;
 
@@ -30,6 +31,7 @@ const SignUpForm = () => {
         }));
     };
 
+    // * Submit Button
     const handleSubmit = async (e) => {
         e.preventDefault();
 
