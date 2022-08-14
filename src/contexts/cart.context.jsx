@@ -25,16 +25,62 @@ export const CartContext = createContext({
     cartItems: [],
     addItemToCart: () => {},
     totalQuantity: 0,
+    handleIncrementDecrement: () => {},
+    handleRemoveButton: () => {},
+    totalAmount: 0,
 });
 
 export const CartProvider = ({ children }) => {
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [totalQuantity, setTotalQuantity] = useState(0);
+    const [totalAmount, setTotalAmount] = useState(0);
 
     const addItemToCart = (productToAdd) => {
         setCartItems(addCartItem(cartItems, productToAdd));
     };
+
+    const handleIncrementDecrement = (e, itemQuantityToChange) => {
+        const buttonClicked = e.target.id;
+
+        if (buttonClicked === "increment") {
+            itemQuantityToChange = {
+                ...itemQuantityToChange,
+                quantity: itemQuantityToChange.quantity + 1,
+            };
+        } else if (buttonClicked === "decrement") {
+            itemQuantityToChange = {
+                ...itemQuantityToChange,
+                quantity: itemQuantityToChange.quantity - 1,
+            };
+        }
+
+        const alteredCartItems = cartItems.map((item) => {
+            if (item.id === itemQuantityToChange.id) {
+                return itemQuantityToChange;
+            }
+            return item;
+        });
+
+        // To remove the items with quantity 0
+        const resultantArr = alteredCartItems.filter(
+            (item) => item.quantity !== 0
+        );
+
+        setCartItems(resultantArr);
+    };
+
+    const handleRemoveButton = (itemToRemove) => {
+        setCartItems(cartItems.filter((item) => item.id !== itemToRemove.id));
+    };
+
+    useEffect(() => {
+        setTotalAmount(
+            cartItems.reduce((prev, curr) => {
+                return prev + curr.price * curr.quantity;
+            }, 0)
+        );
+    }, [cartItems]);
 
     useEffect(() => {
         setTotalQuantity(
@@ -50,6 +96,9 @@ export const CartProvider = ({ children }) => {
         addItemToCart,
         cartItems,
         totalQuantity,
+        handleIncrementDecrement,
+        handleRemoveButton,
+        totalAmount,
     };
 
     return (
