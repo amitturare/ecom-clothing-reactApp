@@ -6,10 +6,14 @@ import CartItem from "../cart-item/cart-item.component";
 
 import { CartContext } from "../../contexts/cart.context";
 
-import "./cart-dropdown.styles.scss";
+import {
+    CartDropdownContainer,
+    CartItems,
+    EmptyMessage,
+} from "./cart-dropdown.styles";
 
 const CartDropdown = () => {
-    const { cartItems } = useContext(CartContext);
+    const { cartItems, totalQuantity } = useContext(CartContext);
     const navigate = useNavigate();
 
     const goToCheckoutHandler = () => {
@@ -17,14 +21,23 @@ const CartDropdown = () => {
     };
 
     return (
-        <div className="cart-dropdown-container">
-            <div className="cart-items">
-                {cartItems.map((item) => {
-                    return <CartItem cartItem={item} key={item.id} />;
-                })}
-            </div>
-            <Button onClick={goToCheckoutHandler}>Checkout</Button>
-        </div>
+        <CartDropdownContainer>
+            <CartItems>
+                {cartItems.length ? (
+                    cartItems.map((item) => {
+                        return <CartItem cartItem={item} key={item.id} />;
+                    })
+                ) : (
+                    <EmptyMessage>Your cart is empty</EmptyMessage>
+                )}
+            </CartItems>
+            <Button
+                onClick={goToCheckoutHandler}
+                disabled={!totalQuantity ? true : false}
+            >
+                Checkout
+            </Button>
+        </CartDropdownContainer>
     );
 };
 
